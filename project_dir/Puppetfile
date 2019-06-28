@@ -1,0 +1,15 @@
+mod 'puppetlabs-kubernetes'
+mod 'puppetlabs-stdlib'
+mod 'puppetlabs-apache'
+mod 'puppetlabs-concat'
+mod 'puppet-archive'
+mod 'puppetlabs-translate'
+mod 'herculesteam-augeasproviders_sysctl'
+mod 'herculesteam-augeasproviders_core'
+mod 'camptocamp-kmod'
+
+# cisco demo
+mod 'puppetlabs-netdev_stdlib', '0.18.0'
+mod 'puppetlabs-cisco_ios',
+  :git    => 'https://github.com/shermdog/cisco_ios.git',
+  :branch => 'bolt_demo'
