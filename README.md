@@ -4,6 +4,12 @@ A self service demo of Bolt capabilities. This includes a vagrant environment in
 
 ## Setup
 
+You can either install Bolt from the published package, or provide the path to a local package by setting the `BOLT_PACKAGE` environment variable to the absolute path to the package. The Bolt controller is a CentOS 7 machine.
+
+```
+export BOLT_PACKAGE=/home/user/bolt-vanagon/output/el/puppet-bolt.rpm
+```
+
 To bring the environment up run:
 
 `vagrant up`

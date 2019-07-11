@@ -1,0 +1,6 @@
+---
+ssh:
+  host-key-check: false
+  private-key: ~/.ssh/id_bolt
+  user: vagrant
+  run-as: root

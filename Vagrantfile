@@ -11,7 +11,6 @@ Vagrant.configure("2") do |config|
     tn = "target#{i}"
     hosts[tn] = "10.0.0.#{100 + i}"
     targets << tn
-    # TODO: Add targets to inventory?
   end
 
   hosts_file = hosts.map { |k, v| "#{v} #{k}" }.join('\n')
@@ -27,14 +26,24 @@ Vagrant.configure("2") do |config|
 
     bolt.vm.network "private_network", ip: "10.0.0.200"
 
-    bolt.vm.provision "shell", privileged: true,
-      # TODO: Download packages and rsync to VM instead of download?
+    if ENV['BOLT_PACKAGE']
+      bolt.vm.provision "file", source: ENV['BOLT_PACKAGE'], destination: "~/puppet-bolt.rpm"
+
+      bolt.vm.provision "shell", privileged: true,
+      inline: <<~INSTALL
+        yum install -y puppet-bolt.rpm
+
+        printf '#{hosts_file}' >> /etc/hosts
+      INSTALL
+    else
+      bolt.vm.provision "shell", privileged: true,
       inline: <<~INSTALL
         rpm -Uvh https://yum.puppet.com/puppet6-release-el-7.noarch.rpm
         yum install -y puppet-bolt git
 
         printf '#{hosts_file}' >> /etc/hosts
       INSTALL
+    end
 
     bolt.vm.provision "shell", privileged: false, inline: "/vagrant/install_ruby.sh"
     bolt.vm.provision "shell", privileged: false, inline: <<~CODE

@@ -52,7 +52,7 @@ class BoltDemo
     Try it out: bolt command run 'systemctl status httpd' -n target0
     WELCOME
 
-    run_command(/bolt command run 'systemctl status httpd' -n .*/)
+    run_command(/bolt command run .* -n .*/)
 
     bolt_say(<<~INST)
     Woops - looks like Apache has stopped on those nodes

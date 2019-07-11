@@ -1,0 +1,24 @@
+parameters:
+  nodes:
+    type: TargetSpec
+  timeout:
+    type: Optional[Integer]
+    default: 100
+
+steps:
+  - command: sed -i -E "s/^Timeout [0-9]+$/Timeout ${timeout}/g" /etc/httpd/conf/httpd.conf
+    target: $nodes
+  - name: reload_apache
+    plan: canary
+    parameters:
+      task: service
+      params:
+        action: restart
+        name: httpd
+      nodes: $nodes
+      canary_size: 1
+  - name: verify
+    command: grep "Timeout ${timeout}" /etc/httpd/conf/httpd.conf
+    target: $nodes
+
+return: $verify
