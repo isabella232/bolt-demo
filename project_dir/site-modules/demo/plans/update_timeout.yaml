@@ -2,7 +2,7 @@ parameters:
   nodes:
     type: TargetSpec
   timeout:
-    type: Optional[Integer]
+    type: Optional[String]
     default: 100
 
 steps:

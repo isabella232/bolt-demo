@@ -1,5 +1,14 @@
 ---
 version: 2
+groups:
+  - name: tf
+    targets:
+      - _plugin: terraform
+        dir: /home/vagrant/Boltdir
+        resource_type: docker_container.nginx
+        uri: name
+    config:
+      transport: docker
 targets:
   - _plugin: task
     task: bolt_vagrant::guest

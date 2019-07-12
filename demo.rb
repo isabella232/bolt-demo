@@ -1,27 +1,20 @@
 #!/usr/bin/env ruby
-
 require './demo_prompt.rb'
 
 class BoltDemo
-
   def initialize
     @prompt = DemoPrompt.new
-  end
 
-  # Load all active demos
-  def load_demos
+    # Load demos
     Dir[File.join(__dir__, "demos/active/*.rb")].each { |file| require file }
-    @demos = Demo.constants.map.with_index { |demo, i| [ i + 1, Demo.const_get(demo) ] }.to_h
+    @demos = Demo.constants.map.with_index { |demo, i| [ i + 1, Demo.const_get(demo) ] }.to_h || {}
   end
 
-  # Display a list of loaded demos with name and description
   def list_demos
     @demos.sort.map { |i, demo| "[#{i}]\t{{#{demo.title}}} " }.join("\n")
   end
 
   def run
-    load_demos
-
     loop do
       @prompt.clear_screen
       @prompt.say(<<~WELCOME)
@@ -35,6 +28,7 @@ class BoltDemo
 
       if @demos[choice.to_i]
         @demos[choice.to_i].new(@prompt).run
+        @prompt.keypress("Press enter to continue")
       elsif choice =~ /^[Qq](uit)?$/
         break
       end

@@ -12,6 +12,7 @@ Vagrant.configure("2") do |config|
     hosts[tn] = "10.0.0.#{100 + i}"
     targets << tn
   end
+  packages = "yum-utils device-mapper-persistent-data lvm2 wget unzip git"
 
   hosts_file = hosts.map { |k, v| "#{v} #{k}" }.join('\n')
 
@@ -30,30 +31,40 @@ Vagrant.configure("2") do |config|
       bolt.vm.provision "file", source: ENV['BOLT_PACKAGE'], destination: "~/puppet-bolt.rpm"
 
       bolt.vm.provision "shell", privileged: true,
-      inline: <<~INSTALL
-        yum install -y puppet-bolt.rpm
+      inline: <<~INSTALL_BOLT
+        yum install -y puppet-bolt.rpm #{packages}
 
         printf '#{hosts_file}' >> /etc/hosts
-      INSTALL
+      INSTALL_BOLT
     else
       bolt.vm.provision "shell", privileged: true,
-      inline: <<~INSTALL
+      inline: <<~INSTALL_BOLT
         rpm -Uvh https://yum.puppet.com/puppet6-release-el-7.noarch.rpm
-        yum install -y puppet-bolt git
+        yum install -y puppet-bolt #{packages}
 
         printf '#{hosts_file}' >> /etc/hosts
-      INSTALL
+      INSTALL_BOLT
     end
 
-    bolt.vm.provision "shell", privileged: false, inline: "/vagrant/install_ruby.sh"
-    bolt.vm.provision "file", source: "./project_dir", destination: "~/Boltdir"
-    bolt.vm.provision "file", source: "demos", destination: "~/demos"
-    bolt.vm.provision "file", source: "demo.rb", destination: "~/demo.rb"
-    bolt.vm.provision "file", source: "demo_prompt.rb", destination: "~/demo_prompt.rb"
-    bolt.vm.provision "shell", privileged: false, inline: <<~CODE
+    ### Install Docker, Go, Terraform, and Terraform Docker provider
+    bolt.vm.provision "shell", privileged: true, inline: "/vagrant/resources/install_terraform.sh"
+
+    ### Install Ruby
+    bolt.vm.provision "shell", privileged: false, inline: "/vagrant/resources/install_ruby.sh"
+
+    ### Install demos
+    bolt.vm.provision "file", source: "./project_dir", destination: "/home/vagrant/Boltdir"
+    bolt.vm.provision "file", source: "./demos", destination: "~/demos"
+    bolt.vm.provision "file", source: "./demo.rb", destination: "~/demo.rb"
+    bolt.vm.provision "file", source: "./demo_prompt.rb", destination: "~/demo_prompt.rb"
+
+    ### Install Puppet modules
+    bolt.vm.provision "shell", privileged: false, inline: <<~INSTALL_PUPPETFILE
       cd ~/Boltdir
       bolt puppetfile install
-    CODE
+      terraform init
+      terraform apply -auto-approve
+    INSTALL_PUPPETFILE
 
     bolt.vm.provision "shell", privileged: false, inline: SSH_CONFIG
   end
