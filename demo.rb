@@ -30,7 +30,11 @@ class BoltDemo
   end
 
   def bolt_say(message)
-    @prompt.say("\n#{message}\n", color: :bright_cyan)
+    @prompt.say("\n#{style_command(message)}\n", color: :white)
+  end
+
+  def style_command(message)
+    message.gsub("{{", "\e[38;5;49m").gsub("}}", "\e[0m")
   end
 
   def clear_screen
@@ -48,15 +52,16 @@ class BoltDemo
     # TODO: It'd be nice if this 'typed'
     bolt_say(<<~WELCOME)
     Welcome to Bolt! It's easy to get started with.
-    You can run commands on remote systems with 'bolt command run <command> -n <hostnames>''
-    Try it out: bolt command run 'systemctl status httpd' -n target0
+    You can run commands on remote systems with {{bolt command run <command> -n <hostnames>}}
+
+    Try it out: {{bolt command run 'systemctl status httpd' -n target0}}
     WELCOME
 
     run_command(/bolt command run .* -n .*/)
 
     bolt_say(<<~INST)
     Woops - looks like Apache has stopped on those nodes
-    Let's restart it: bolt command run 'systemctl start httpd' -n target0'
+    Let's restart it: {{bolt command run 'systemctl start httpd' -n target0'}}
     INST
 
     # TODO: Single quotes in regex
@@ -81,7 +86,7 @@ class BoltDemo
     @quiet_cmd.run!(cat)
 
     # Extra newline after `cat`
-    bolt_say("\nRun the plan: bolt plan run demo::update_timeout timeout=200 -n target0")
+    bolt_say("\nRun the plan: {{bolt plan run demo::update_timeout timeout=200 -n target0}}")
     # TODO: Colons in regex
     run_command(/bolt plan .* timeout=\d+ -n.*/) 
 
@@ -100,7 +105,7 @@ class BoltDemo
     cat = 'cat Boltdir/site-modules/demo/plans/deploy_apache.pp'
     @quiet_cmd.run!(cat)
 
-    bolt_say("Try it out: bolt plan run demo::deploy_apache -n target0")
+    bolt_say("Try it out: {{bolt plan run demo::deploy_apache -n target0}}")
     run_command(/bolt plan run .* -n .*/)
     @prompt.keypress("Check it out at 10.0.0.100\nPress 'enter' to continue")
   end
