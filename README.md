@@ -17,10 +17,25 @@ To bring the environment up run:
 ## Run the Demos
 ```
 vagrant ssh bolt
-./demo.rb
+./executor.rb
 ```
 
 ## Adding a Demo
+
+To add a demo, create a new ruby script that contains a class that inherits from the `Demo` class. The only function you need to define is `run`, and you can  optionally include a `title` method to print a title.
+
+```
+class MyDemo < Demo
+  def self.title
+    "Title of My Demo"
+  end
+
+  def run
+  end
+end
+```
+
+There are a few methods you'll want to use for your demo:
 
 TODO
 
