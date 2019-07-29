@@ -6,7 +6,8 @@ parameters:
     default: 100
 
 steps:
-  - command: sed -i -E "s/^Timeout [0-9]+$/Timeout ${timeout}/g" /etc/httpd/conf/httpd.conf
+  # TODO: This interpolation doesn't work
+  - command: sed -i -E "s/^Timeout [0-9]+$/Timeout 200/g" /etc/httpd/conf/httpd.conf
     target: $nodes
   - name: reload_apache
     plan: canary

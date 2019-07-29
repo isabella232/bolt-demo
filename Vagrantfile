@@ -55,7 +55,7 @@ Vagrant.configure("2") do |config|
     ### Install demos
     bolt.vm.provision "file", source: "./project_dir", destination: "/home/vagrant/Boltdir"
     bolt.vm.provision "file", source: "./demos", destination: "~/demos"
-    bolt.vm.provision "file", source: "./demo.rb", destination: "~/demo.rb"
+    bolt.vm.provision "file", source: "./executor.rb", destination: "~/executor.rb"
     bolt.vm.provision "file", source: "./demo_prompt.rb", destination: "~/demo_prompt.rb"
 
     ### Install Puppet modules
