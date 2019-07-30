@@ -9,6 +9,7 @@ groups:
         uri: name
     config:
       transport: docker
-targets:
-  - _plugin: task
-    task: bolt_vagrant::guest
+  - name: vms
+    targets:
+      - _plugin: task
+        task: bolt_vagrant::guest

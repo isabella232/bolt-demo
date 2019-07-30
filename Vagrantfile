@@ -67,6 +67,11 @@ Vagrant.configure("2") do |config|
     INSTALL_PUPPETFILE
 
     bolt.vm.provision "shell", privileged: false, inline: SSH_CONFIG
+
+    ### Set up AWS Credentials
+    if ENV['BOLT_AWS_DEMO']
+      bolt.vm.provision "file", source: "~/.aws/credentials", destination: "~/.aws/credentials"
+    end
   end
 
   targets.each do |target_name|
