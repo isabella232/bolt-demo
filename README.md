@@ -12,7 +12,9 @@ export BOLT_PACKAGE=/home/user/bolt-vanagon/output/el/puppet-bolt.rpm
 
 To bring the environment up run:
 
-`vagrant up`
+```
+vagrant up
+```
 
 ## Run the Demos
 ```
@@ -37,7 +39,13 @@ end
 
 There are a few methods you'll want to use for your demo:
 
-TODO
+| Function                | Parameters                                                                         | Description                                                                            | Example                                                  |
+|-------------------------|------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|----------------------------------------------------------|
+| `@prompt.say`           | Message (String)                                                                   | Print instructional text to the user                                                   | `@prompt.say("Welcome to the Bolt demos")`               |
+| `@prompt.run_command`   | Regex the input command must match (Regex)                                         | Have the user input a command and run the command they input                           | `@prompt.run_command(/bolt command run hostname -n all/)` |
+| `@prompt.keypress`      | Message to prompt for keypress (String) Optional array of valid keypresses (Array) | Have the user press a key to continue                                                  | `@prompt.keypress("Press enter to continue", [:return])`  |
+| `@prompt.clear_screen`  |                                                                                    | Clear the screen                                                                       | `@prompt.clear_screen`                                   |
+| `@prompt.quiet_command` | The command to run (String)                                                        | Run a command without showing the command being run. Display the output of the command | `@prompt.quiet_command("cat foo.rb")`                    |
 
 ### Kudos
 
