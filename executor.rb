@@ -47,8 +47,13 @@ class BoltDemo
       end
 
       with_titles = Hash[@@demos.collect { |d| [d.title, d] }]
+      with_titles["Exit"] = nil
       klass = @prompt.enum_select("", with_titles)
-      break if index =~ /^[Qq](uit)?$/
+      if klass == "Exit"
+        # TODO: This seems like an opportunity for something clever
+        @prompt.say("Thanks for stopping by!")
+        break
+      end
       @prompt.clear_screen
 
       begin

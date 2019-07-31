@@ -14,7 +14,6 @@ class DemoPrompt < TTY::Prompt
   end
 
   def run_command(valid_regex = nil)
-    # TODO: Tab complete Bolt commands
     a = ask("$ ") do |c|
       if valid_regex
         c.validate valid_regex
@@ -22,6 +21,19 @@ class DemoPrompt < TTY::Prompt
     end
 
     @quiet_cmd.run!(a)
+    puts "\n"
+    cont = yes?("Continue or Retry?") do |q|
+      q.suffix 'C/R'
+      q.positive 'C'
+      q.negative 'R'
+      q.validate(/[CcRr]/, "Please enter C to continue, or R to retry the last step")
+      # Doesn't support lower
+      q.convert -> (input) { input.downcase == 'c' }
+    end
+    if !cont
+      puts "\n"
+      run_command(valid_regex)
+    end
   end
 
   def say(message)
