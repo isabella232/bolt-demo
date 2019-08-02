@@ -13,3 +13,12 @@ groups:
     targets:
       - _plugin: task
         task: bolt_vagrant::guest
+  - name: aws
+    targets:
+      - _plugin: aws::ec2
+        region: us-west-2
+        name: public_dns_name
+        uri: public_ip_address
+    config:
+      ssh:
+        user: ubuntu

@@ -9,10 +9,10 @@ class AWSPlugin < Demo
     The AWS EC2 plugin looks up running EC2 instances, and includes keys for filtering them.
     Let's see it in action:
     INTRO
-    @prompt.quiet_command("cat Boltdir/aws-inventory.yaml")
+    @prompt.quiet_command("cat Boltdir/inventory.yaml")
     @prompt.keypress
     @prompt.clear_screen
-    @prompt.say("{{bolt command run hostname -n aws -i Boltdir/aws-inventory.yaml}}")
-    @prompt.run_command(/bolt command run .* -n aws -i Boltdir\/aws-inventory.yaml/)
+    @prompt.say("{{bolt command run hostname -n aws}}")
+    @prompt.run_command(/bolt command run .* -n aws/)
   end
 end
