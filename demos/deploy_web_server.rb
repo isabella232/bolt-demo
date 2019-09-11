@@ -5,7 +5,6 @@ class DeployWebServer < Demo
   end
 
   def run
-    yaml_plan_demo
     bolt_apply_demo
     @prompt.say("Thanks for completing our demo! Feel free to play with Bolt in our VM environment, or ask us any questions.")
   end

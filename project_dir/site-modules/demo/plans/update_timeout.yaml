@@ -6,20 +6,16 @@ parameters:
     default: 100
 
 steps:
-  # TODO: This interpolation doesn't work
-  - command: sed -i -E "s/^Timeout [0-9]+$/Timeout 200/g" /etc/httpd/conf/httpd.conf
+  - command: "sed -i -E 's/^Timeout [0-9]+$/Timeout ${timeout}/g' /etc/httpd/conf/httpd.conf"
     target: $nodes
   - name: reload_apache
-    plan: canary
+    target: $nodes
+    task: service
     parameters:
-      task: service
-      params:
-        action: restart
-        name: httpd
-      nodes: $nodes
-      canary_size: 1
+      action: restart
+      name: httpd
   - name: verify
-    command: grep "Timeout ${timeout}" /etc/httpd/conf/httpd.conf
+    command: "grep 'Timeout ${timeout}' /etc/httpd/conf/httpd.conf"
     target: $nodes
 
 return: $verify
