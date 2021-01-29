@@ -1,11 +1,11 @@
 class RunCommand < Demo
   def self.title
-    "Deploy a Web Server"
+    "Run a command"
   end
 
   def run
     stop_httpd = "bolt command run 'systemctl stop httpd' -n target0"
-    TTY::Command.new(uuid: false, printer: :null).run!(stop_httpd)
+    @prompt.quiet_command(stop_httpd)
     @prompt.clear_screen
     @prompt.say(<<~WELCOME)
       Welcome to Bolt! It's easy to get started with.

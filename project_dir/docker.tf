@@ -7,7 +7,7 @@ provider "docker" {
 resource "docker_container" "nginx" {
   image = "${docker_image.nginx.latest}"
   count = "3"
-  name  = "docker_target_${count.index}"
+  name  = "tf_docker_${count.index}"
   ports {
     internal = 880 + count.index
     external = 880 + count.index
